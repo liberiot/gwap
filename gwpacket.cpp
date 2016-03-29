@@ -98,7 +98,7 @@ bool GWPACKET::send(void)
   ccPacket.data[GWAP_POS_REGID] = regId;
 
   i = GWAP_NB_TX_TRIES;
-  while(!(res = panstamp.radio.sendData(ccPacket)) && i>1)
+  while(!(res = panstamp.sendData(ccPacket)) && i>1)
   {
     i--;
     delay(GWAP_TX_DELAY);
