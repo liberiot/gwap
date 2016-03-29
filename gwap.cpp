@@ -116,13 +116,13 @@ void GWAP::init(void)
 
   // Build UID
   panstamp.core.getUID(address);
-  for(i=8 ; i<GWAP_ADDRESS_LENGTH ; i++)
-    address[i] = regTable[REGI_PRODUCTCODE]->value[i];
+  for(i=0 ; i<regTable[REGI_PRODUCTCODE]->length ; i++)
+    address[i + GWAP_ADDRESS_LENGTH - regTable[REGI_PRODUCTCODE]->length] = regTable[REGI_PRODUCTCODE]->value[i];
 
   // Config radio settings
-  panstamp.radio.devAddress = address[0]; 
-  panstamp.radio.setCCregs();
-  
+  panstamp.radio.setDevAddress(address[0]);
+  panstamp.radio.setSyncWord(GWAP_SYNCWORD_H, GWAP_SYNCWORD_L);
+
   // Attach RF ISR
   panstamp.attachInterrupt(packetReceived);
 }
