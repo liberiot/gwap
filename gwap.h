@@ -29,6 +29,17 @@
 #include "gwpacket.h"
 
 /**
+ * GWAP official synchronisation word
+ */
+#define GWAP_SYNCWORD_H  0x6A
+#define GWAP_SYNCWORD_L  0x1C
+
+/**
+ * Minimum delay between transmissions
+ */
+#define GWAP_TX_DELAY 500 // 500 msec
+
+/**
  * Macros
  */
 #define eepromToFactoryDefaults()   gwap.nvolatToFactoryDefaults()
