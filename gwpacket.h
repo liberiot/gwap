@@ -32,7 +32,7 @@
  * GWAP definitions
  */
 #define GWAP_ADDRESS_LENGTH    12
-#define GWAP_DATA_HEAD_LEN     GWAP_ADDRESS_LENGTH + 1
+#define GWAP_DATA_HEAD_LEN     GWAP_ADDRESS_LENGTH + 2
 #define GWAP_REG_VAL_LEN       CC1101_DATA_LEN - GWAP_DATA_HEAD_LEN     // SWAP data payload - max length
 #define GWAP_NB_TX_TRIES       3                                        // Number of transmission retries
 #define GWAP_TX_DELAY          10                                       // Delay before sending (msec)
