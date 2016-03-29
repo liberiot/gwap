@@ -42,6 +42,10 @@
 #include "thermistor.h"
 
 
+// Uncomment next line if you are running this application from a
+// battery-board
+#define READ_VCC_FROM_A0  1
+
 // Macros
 #define powerThermistorOn()   digitalWrite(NTC_POWER_PIN, HIGH)
 #define powerThermistorOff()  digitalWrite(NTC_POWER_PIN, LOW)
@@ -70,9 +74,6 @@ void setup()
   pinMode(NTC_POWER_PIN, OUTPUT);    // Configure power pin. This pin will be used to power the thermistor
   powerThermistorOff();          // Unpower sensor by default
   
-  // Transmit product code
-  gwap.getRegister(REGI_PRODUCTCODE)->getData();
-
   // Enter SYNC state
   gwap.enterSystemState(SYSTATE_SYNC);
 
@@ -87,9 +88,11 @@ void setup()
 
   // Transmit periodic Tx interval
   gwap.getRegister(REGI_TXINTERVAL)->getData();
+  delay(GWAP_TX_DELAY);
 
    // Switch to Rx OFF state
   gwap.enterSystemState(SYSTATE_RXOFF);
+  delay(GWAP_TX_DELAY);
 }
 
 /**
@@ -103,8 +106,6 @@ void loop()
 
   // Transmit temperature value
   gwap.getRegister(REGI_SENSOR)->getData();
-  // Transmit power voltage
-  gwap.getRegister(REGI_VOLTSUPPLY)->getData();
 
   digitalWrite(LED, LOW);
 

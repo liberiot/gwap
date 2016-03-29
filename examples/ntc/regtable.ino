@@ -34,18 +34,14 @@ DEFINE_COMMON_REGISTERS()
 /*
  * Definition of custom registers
  */
-// Voltage supply
-static byte dtVoltSupply[2];
-REGISTER regVoltSupply(dtVoltSupply, sizeof(dtVoltSupply), &updtVoltSupply, NULL);
 // Sensor value register
-static byte dtSensor[2];
+static byte dtSensor[4];
 REGISTER regSensor(dtSensor, sizeof(dtSensor), &updtSensor, NULL);
 
 /**
  * Initialize table of registers
  */
 DECLARE_REGISTERS_START()
-  &regVoltSupply,
   &regSensor
 DECLARE_REGISTERS_END()
 
@@ -59,27 +55,6 @@ DEFINE_COMMON_CALLBACKS()
  */
  
 /**
- * updtVoltSupply
- *
- * Measure voltage supply and update register
- *
- * 'rId'  Register ID
- */
-const void updtVoltSupply(byte rId)
-{  
-  unsigned long result = panstamp.getVcc();
- 
-  /**
-   * register[eId]->member can be replaced by regVoltSupply in this case since
-   * no other register is going to use "updtVoltSupply" as "updater" function
-   */
-
-  // Update register value
-  regTable[rId]->value[0] = (result >> 8) & 0xFF;
-  regTable[rId]->value[1] = result & 0xFF; 
-}
-
-/**
  * updtSensor
  *
  * Measure sensor data and update register
@@ -88,6 +63,14 @@ const void updtVoltSupply(byte rId)
  */
 const void updtSensor(byte rId)
 {
+  uint32_t voltage;
+  
+  #ifdef READ_VCC_FROM_A0
+  voltage = analogRead(A0);
+  #else
+  voltage = panstamp.getVcc();
+  #endif
+  
   uint16_t temp;
 
   powerThermistorOn();        // Power thermistor
@@ -96,8 +79,10 @@ const void updtSensor(byte rId)
 
   temp += 500;
 
-  // Fill register
-  dtSensor[0] = (temp >> 8) & 0xFF;
-  dtSensor[1] = temp & 0xFF;
+  // Update register value
+  dtSensor[0] = (voltage >> 8) & 0xFF;
+  dtSensor[1] = voltage & 0xFF;
+  dtSensor[2] = (temp >> 8) & 0xFF;
+  dtSensor[3] = temp & 0xFF;
 }
 
