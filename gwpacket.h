@@ -106,6 +106,11 @@ class GWPACKET
     GWDATA value;
 
     /**
+     * Packet CRC
+     */
+    uint8_t crc;
+
+    /**
      * GWPACKET
      * 
      * Class constructor
@@ -131,6 +136,17 @@ class GWPACKET
      *  False otherwise
      */
     bool send(void);
+
+    /**
+     * checkCrc
+     * 
+     * Check CRC field
+     *
+     * @return
+     *  True if the CRC succeeds
+     *  False otherwise
+     */
+    bool checkCrc(void);
 };
 
 #endif

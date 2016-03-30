@@ -42,6 +42,8 @@ GWPACKET::GWPACKET(CCPACKET *packet)
   for(i=0 ; i<ccPacket.length ; i++)
     ccPacket.data[i] = packet->data[i];
   
+  crc = ccPacket.data[ccPacket.length-1];
+
   for(i=0 ; i<GWAP_ADDRESS_LENGTH ; i++)
     address[i] = ccPacket.data[i];
 
@@ -88,7 +90,7 @@ bool GWPACKET::send(void)
       ccPacket.data[i+GWAP_DATA_HEAD_LEN + 1] = value.data[i];
   }
 
-  ccPacket.length = value.length + GWAP_DATA_HEAD_LEN + 1;
+  ccPacket.length = value.length + GWAP_DATA_HEAD_LEN + 2;
 
   for(i=0 ; i<GWAP_ADDRESS_LENGTH ; i++)
     ccPacket.data[i] = address[i];
@@ -96,6 +98,12 @@ bool GWPACKET::send(void)
   ccPacket.data[GWAP_POS_NONCE] = gwap.nonce++;
   ccPacket.data[GWAP_POS_FUNCTION] = function;
   ccPacket.data[GWAP_POS_REGID] = regId;
+
+  // Calculate CRC
+  crc = 0;
+  for(i=0 ; i<ccPacket.length-1 ; i++)
+    crc += ccPacket.data[i];
+  ccPacket.data[i] = crc; // Place CRC byte at the end of the frame
 
   i = GWAP_NB_TX_TRIES;
   while(!(res = panstamp.sendData(ccPacket)) && i>1)
@@ -105,5 +113,24 @@ bool GWPACKET::send(void)
   }
 
   return res;
+}
+
+/**
+ * checkCrc
+ * 
+ * Check CRC field
+ *
+ * @return
+ *  True if the CRC succeeds
+ *  False otherwise
+ */
+bool GWPACKET::checkCrc(void)
+{
+  uint8_t i, tmpCrc = 0;
+
+  for(i=0 ; i<ccPacket.length-1 ; i++)
+    tmpCrc += ccPacket.data[i];
+
+  return (tmpCrc == crc);
 }
 
