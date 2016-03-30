@@ -99,7 +99,7 @@ GWAP::GWAP(void)
  */
 void GWAP::init(void)
 {
-  uint8_t i;
+  uint8_t i, tmp[8];
   STORAGE nvMem;
 
   // Read signature from info/eeprom memory
@@ -115,7 +115,9 @@ void GWAP::init(void)
     regTable[i]->init();
 
   // Build UID
-  panstamp.core.getUID(address);
+  panstamp.core.getUID(tmp);
+  for(i=0 ; i<sizeof(tmp) ; i++)
+    address[i] = tmp[sizeof(tmp)-1-i];
   for(i=0 ; i<regTable[REGI_PRODUCTCODE]->length ; i++)
     address[i + GWAP_ADDRESS_LENGTH - regTable[REGI_PRODUCTCODE]->length] = regTable[REGI_PRODUCTCODE]->value[i];
 
