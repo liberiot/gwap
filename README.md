@@ -10,7 +10,7 @@ GWAP is a star-topology network protocol. All nodes transmit to a central gatewa
 
 GWAP packets need to comply witht he following packet structure:
 
-[GWAP packet structure](http://panstamp.org/pictures/gwap_packet.jpg)
+![GWAP packet structure](http://panstamp.org/pictures/gwap_packet.jpg)
 
 ## 12-byte UID
 
