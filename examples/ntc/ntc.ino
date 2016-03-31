@@ -34,7 +34,7 @@
  *
  * Associated Device Definition Files, defining registers, endpoints and
  * configuration parameters:
- * temp.json (Temperature sensor)
+ * 00010004.json (Temperature sensor)
  */
  
 #include "regtable.h"
@@ -88,11 +88,11 @@ void setup()
 
   // Transmit periodic Tx interval
   gwap.getRegister(REGI_TXINTERVAL)->getData();
-  delay(GWAP_TX_DELAY);
+  delay(GWAP_TX_SILENCE);
 
    // Switch to Rx OFF state
   gwap.enterSystemState(SYSTATE_RXOFF);
-  delay(GWAP_TX_DELAY);
+  delay(GWAP_TX_SILENCE);
 }
 
 /**

@@ -37,7 +37,7 @@
 /**
  * Minimum delay between transmissions
  */
-#define GWAP_TX_DELAY 500 // 500 msec
+#define GWAP_TX_SILENCE 500 // 500 msec
 
 /**
  * Macros

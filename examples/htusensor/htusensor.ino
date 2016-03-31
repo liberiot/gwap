@@ -39,7 +39,7 @@
  *
  * Associated Device Definition Files, defining registers, endpoints and
  * configuration parameters:
- * temphum.json (Dual Humidity + Temperature sensor)
+ * 00010001.json (Dual Humidity + Temperature sensor)
  */
 
 #include "Wire.h"
@@ -81,10 +81,10 @@ void setup()
 
   // Transmit periodic Tx interval
   gwap.getRegister(REGI_TXINTERVAL)->getData();
-  delay(GWAP_TX_DELAY);
+  delay(GWAP_TX_SILENCE);
    // Switch to Rx OFF state
   gwap.enterSystemState(SYSTATE_RXOFF);
-  delay(GWAP_TX_DELAY);
+  delay(GWAP_TX_SILENCE);
 }
 
 void loop()
