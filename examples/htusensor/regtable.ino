@@ -68,6 +68,8 @@ const void updtSensor(byte rId)
   
   #ifdef READ_VCC_FROM_A0
   voltage = analogRead(A0);
+  voltage *= 3300;
+  voltage /= 0xFFF;
   #else
   voltage = panstamp.getVcc();
   #endif
@@ -87,3 +89,4 @@ const void updtSensor(byte rId)
   dtSensor[4] = (humidity >> 8) & 0xFF;
   dtSensor[5] = humidity & 0xFF;
 }
+
