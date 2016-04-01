@@ -22,7 +22,7 @@
  * Creation date: 03/31/2016
  *
  * Device:
- * Current meter and energy/power calculator
+ * 3-Channel current meter and temperature sensor
  *
  * Description:
  * This application gets readings from three current sensors and calculates
