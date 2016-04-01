@@ -91,7 +91,10 @@ void setup()
 
   // Configure sensor power pin
   pinMode(ACC_POWER_PIN, OUTPUT);
-  digitalWrite(ACC_POWER_PIN, HIGH);
+  powerAccelerometerOff();
+  delay(200);
+  powerAccelerometerOn();
+  delay(200);
 
   // Initialise accelerometer
   accel.init();
