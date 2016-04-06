@@ -27,7 +27,6 @@
 #include "gwpacket.h"
 #include "commonregs.h"
 
-
 DEFINE_COMMON_REGINDEX_START()
 DEFINE_COMMON_REGINDEX_END()
 
@@ -46,6 +45,10 @@ void packetReceived(CCPACKET *packet)
   GWPACKET gwPacket = GWPACKET(packet);
   REGISTER *reg;
 
+  // CRC not passed?
+  if (!gwPacket.checkCrc())
+    return;
+
   // Function
   switch(gwPacket.function)
   {
@@ -56,11 +59,13 @@ void packetReceived(CCPACKET *packet)
       // Valid register?
       if ((reg = gwap.getRegister(gwPacket.regId)) == NULL)
         break;
+
       // Filter incorrect data lengths
       if (gwPacket.value.length == reg->length)
         reg->setData(gwPacket.value.data);
       else
         reg->sendGwapStatus();
+
       break;
     case GWAPFUNCT_QRY:
       // Query not addressed to us?
