@@ -52,7 +52,7 @@ GWPACKET::GWPACKET(CCPACKET *packet)
   regId = ccPacket.data[GWAP_POS_REGID];
 
   value.data = ccPacket.data + GWAP_DATA_HEAD_LEN + 1;
-  value.length = ccPacket.length - GWAP_DATA_HEAD_LEN - 1;
+  value.length = ccPacket.length - GWAP_DATA_HEAD_LEN - 2;
 }
 
 /**
