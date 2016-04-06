@@ -67,6 +67,8 @@ const void updtSensor(byte rId)
   
   #ifdef READ_VCC_FROM_A0
   voltage = analogRead(A0);
+  voltage *= 3300;
+  voltage /= 0xFFF;
   #else
   voltage = panstamp.getVcc();
   #endif
