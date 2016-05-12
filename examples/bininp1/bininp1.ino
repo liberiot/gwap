@@ -82,7 +82,7 @@ void setup()
   panstamp.radio.enableHGM();
   
   // Configure input pin
-  pinMode(INPUT_PIN, INPUT_PULLUP);
+  pinMode(INPUT_PIN, INPUT);
 
   // Init GWAP stack
   gwap.init();
@@ -124,6 +124,9 @@ void loop()
     pinEvent = false;
     gwap.getRegister(REGI_BININPUT)->getData();
     delay(GWAP_TX_SILENCE);
+    gwap.getRegister(REGI_BININPUT)->getData();
+    delay(GWAP_TX_SILENCE);
+    gwap.getRegister(REGI_BININPUT)->getData();
   }
   else
     gwap.goToSleep();
