@@ -58,12 +58,15 @@ void setup()
 {
   int i;
 
+  // Enter high Tx power mode
+  panstamp.setHighTxPower();
+
   // Init GWAP stack
   gwap.init();
   
   // Initialize LED pins
   pinMode(LED, OUTPUT);
-
+ 
   // Initialize sensor
   htu.begin();
 
