@@ -38,7 +38,7 @@
  *
  * Associated Device Definition File, defining registers, endpoints and
  * configuration parameters:
- * bininps.xml (Binary/Counter input module)
+ * 00010032.json (Single binary input module)
  */
  
 #include "gwap.h"
