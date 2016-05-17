@@ -80,7 +80,7 @@ void setup()
   // Enter high Tx power mode
   panstamp.setHighTxPower();
   // Long distance board?
-  panstamp.radio.enableHGM();
+  //panstamp.radio.enableHGM();
   
   for(i=0 ; i<NBOF_INPUTS ; i++)
   {
