@@ -56,27 +56,6 @@ DEFINE_COMMON_CALLBACKS()
  */
  
 /**
- * updtVoltSupply
- *
- * Measure voltage supply and update register
- *
- * 'rId'  Register ID
- */
-const void updtVoltSupply(byte rId)
-{
-  uint16_t result = panstamp.getVcc();
-
-  /**
-   * register[eId]->member can be replaced by regVoltSupply in this case since
-   * no other register is going to use "updtVoltSupply" as "updater" function
-   */
-
-  // Update register value
-  regTable[rId]->value[0] = (result >> 8) & 0xFF;
-  regTable[rId]->value[1] = result & 0xFF;
-}
-
-/**
  * updtBinInput
  *
  * Update binary input state and Vcc
@@ -92,7 +71,7 @@ const void updtBinInput(byte rId)
   {
     tmp = digitalRead(inputPin[i]);
     
-    if (tmp)
+    if (!tmp) // invert state
       state |= (1 << i);
     else
       state &= ~(1 << i);
