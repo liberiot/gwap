@@ -142,16 +142,8 @@ void setup()
   gwap.init();
   
   // Enter SYNC state
-  gwap.enterSystemState(SYSTATE_SYNC);
+  gwap.enterSystemState(SYSTATE_RXON);
 
-  // During 3 seconds, listen the network for possible commands whilst the LED blinks
-  for(i=0 ; i<6 ; i++)
-  {
-    digitalWrite(LED, HIGH);
-    delay(100);
-    digitalWrite(LED, LOW);
-    delay(400);
-  }
   // Transmit periodic Tx interval
   gwap.getRegister(REGI_TXINTERVAL)->getData();
   delay(GWAP_TX_SILENCE);
@@ -161,9 +153,6 @@ void setup()
   gwap.getRegister(REGI_BINOUTPUT0)->getData();
   delay(GWAP_TX_SILENCE);
   gwap.getRegister(REGI_BINOUTPUT1)->getData();
-  delay(GWAP_TX_SILENCE);
-  // Switch to Rx OFF state
-  gwap.enterSystemState(SYSTATE_RXOFF);
   delay(GWAP_TX_SILENCE);
 }
 
