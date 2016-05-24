@@ -30,7 +30,6 @@
  * Device that provides 8 controllable binary (ON/OFF) outputs and 4 PWM
  * outputs
  *
- * PANSTAMP_NRG 2
  * Binary outputs : pins 3, 4, 5, 6, 7, 8, 9 and 10
  * PWM outputs: pins 3, 18, 20 and 21 
  *
@@ -39,7 +38,7 @@
  *
  * Associated Device Definition File, defining registers, endpoints and
  * configuration parameters:
- * binouts.xml (Binary/PWM output module)
+ * 00010007.json (Binary/PWM output module)
  */
  
 #include "regtable.h"
