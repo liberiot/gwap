@@ -34,7 +34,7 @@ DEFINE_COMMON_REGISTERS()
 /*
  * Definition of custom registers
  */
-// Current readings (mA): 3 x RMS current (4-byte)
+// Sensor readings : Vcc (2-byte), temperature (2-byte) and 3 x RMS current (4-byte)
 static byte dtSensor[16];
 REGISTER regSensor(dtSensor, sizeof(dtSensor), &updtSensor, NULL);
 

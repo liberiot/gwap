@@ -36,11 +36,6 @@
 #define FIRMWARE_VERSION        0x00000100L
 
 /**
- * Manufacturer SWAP ID
- */
-#define SWAP_MANUFACT_ID        0x00000001L
-
-/**
  * Product SWAP ID
  */
 #define GWAP_PRODUCT_CODE       0x00010012L
