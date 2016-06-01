@@ -35,7 +35,7 @@ DEFINE_COMMON_REGISTERS()
  * Definition of custom registers
  */
 // Sensor value register
-static byte dtSensor[4];
+static byte dtSensor[5];
 REGISTER regSensor(dtSensor, sizeof(dtSensor), &updtSensor, NULL);
 
 /**
@@ -86,5 +86,6 @@ const void updtSensor(byte rId)
   dtSensor[1] = voltage & 0xFF;
   dtSensor[2] = (temp >> 8) & 0xFF;
   dtSensor[3] = temp & 0xFF;
+  dtSensor[4] = 0; // dumb byte
 }
 
