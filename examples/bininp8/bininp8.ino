@@ -126,10 +126,6 @@ void loop()
   {
     pinEvent = false;
     gwap.getRegister(REGI_BININPUT)->getData();
-    delay(GWAP_TX_SILENCE);
-    gwap.getRegister(REGI_BININPUT)->getData();
-    delay(GWAP_TX_SILENCE);
-    gwap.getRegister(REGI_BININPUT)->getData();
   }
   else
     gwap.goToSleep();
