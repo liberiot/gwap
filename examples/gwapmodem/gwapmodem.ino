@@ -139,7 +139,7 @@ void handleSerialCmd(char* command)
         packet.data[i] |= charToHex(command[i*2 + 1]);
       }
       // Send packet via RF
-      panstamp.radio.sendData(packet);
+      panstamp.sendData(packet);
     }
   }
   // Command mode?
