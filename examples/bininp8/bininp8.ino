@@ -122,12 +122,7 @@ void setup()
  */
 void loop()
 {
-  if (pinEvent)
-  {
-    pinEvent = false;
-    gwap.getRegister(REGI_BININPUT)->getData();
-  }
-  else
-    gwap.goToSleep();
+  gwap.getRegister(REGI_BININPUT)->getData();
+  gwap.goToSleep();
 }
 
