@@ -69,7 +69,7 @@ byte charToHex(byte ch);
  */
 void rfPacketReceived(CCPACKET *packet)
 {
-  if (packet->length >= 5)
+  if (packet->length >= GWAP_DATA_HEAD_LEN)
   {
     GWPACKET gwPacket(packet);
 
@@ -280,8 +280,8 @@ void setup()
   // Reset serial buffer
   memset(strSerial, 0, sizeof(strSerial));
 
+  // Initialize UART
   Serial.begin(SERIAL_SPEED);
-  //Serial.begin(57600);
   Serial.flush();
   Serial.println("");
   
