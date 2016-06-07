@@ -33,7 +33,7 @@
  * just after reading the sensor values and transmitting them over the
  * GWAP network.
  *
- * Associated Device Definition Files, defining registers, endpoints and
+ * Associated Device Definition File, defining registers, endpoints and
  * configuration parameters:
  * 00010013.json (Motion, vibration and temperature sensor)
  */
@@ -46,8 +46,8 @@
 
 
 // thermistor pins
-#define NTC_POWER_PIN 15
-#define NTC_PIN A0
+#define NTC_POWER_PIN 22
+#define NTC_PIN A5
 // Thermistor object
 THERMISTOR thermistor(NTC_PIN,        // Analog pin
                       10000,          // Nominal resistance at 25 ºC
@@ -55,8 +55,8 @@ THERMISTOR thermistor(NTC_PIN,        // Analog pin
                       10000);         // Value of the series resistor
                       
 // Accelerometer object. Interruptable pin = internal ACC_INT pin
-#define ACC_INT  11 // Accelerometer interrupt pin
-#define ACC_POWER_PIN 9 // Power pin from the host
+#define ACC_INT  8 // Accelerometer interrupt pin
+#define ACC_POWER_PIN 16 // Power pin from the host
 MMA8652 accel = MMA8652(ACC_INT);
 
 // Used to read statuses and source registers
@@ -79,7 +79,6 @@ volatile uint8_t motion = 0;
 void accEvent(void)
 {
   motion = 1;
-  panstamp.wakeUp();
 }
 
 void setup()
@@ -95,6 +94,9 @@ void setup()
   delay(200);
   powerAccelerometerOn();
   delay(200);
+
+  // Configure IRQ pin
+  pinMode(ACC_INT, INPUT);
 
   // Initialise accelerometer
   accel.init();
@@ -128,12 +130,14 @@ void setup()
 }
 
 void loop()
-{
+{ 
   digitalWrite(LED, HIGH);
   // Transmit sensor data
   gwap.getRegister(REGI_SENSOR)->getData();
   digitalWrite(LED, LOW);
 
+  // Accelerometer in sleep mode
+  accel.sleep();
   // Sleep
   gwap.goToSleep();
 }
