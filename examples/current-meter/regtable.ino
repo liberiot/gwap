@@ -65,7 +65,8 @@ const void updtSensor(byte rId)
 {
   // Read voltage
   uint32_t batt = analogRead(A0);
-  batt *= panstamp.getVcc() * 2;
+  batt *= panstamp.getVcc();
+  batt *= 2;
   batt /= 4095;
 
   // Update register

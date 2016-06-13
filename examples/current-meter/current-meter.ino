@@ -42,7 +42,6 @@
 #include "thermistor.h"
 #include "channel.h"
 
-
 // Digital output used to power the thermistor circuit
 #define NTC_PWR_PIN         14
 // Analog pin used to read the NTC
@@ -58,9 +57,9 @@ THERMISTOR thermistor(NTC_PIN,        // Analog pin
                       3950,           // thermistor's beta coefficient
                       10000);         // Value of the series resistor
 
-CHANNEL channel0(A1, 30);
-CHANNEL channel1(A2, 30);
-CHANNEL channel2(A3, 30);
+CHANNEL channel0(A1, 22, 30);
+CHANNEL channel1(A2, 21, 30);
+CHANNEL channel2(A3, 20, 30);
 
 /**
  * setup
@@ -70,6 +69,11 @@ CHANNEL channel2(A3, 30);
 void setup()
 {
   int i;
+
+  // Start current channels
+  channel0.begin();
+  channel1.begin();
+  channel2.begin();
   
   // Init GWAP stack
   gwap.init();
@@ -116,6 +120,7 @@ void loop()
   gwap.getRegister(REGI_SENSOR)->getData();
 
   // Sleep
-  gwap.goToSleep();
+  //gwap.goToSleep();  // Enabled when powering the board from batteries
+  delay(10000);  // Enabled when powering the board from external PSU
 }
 
