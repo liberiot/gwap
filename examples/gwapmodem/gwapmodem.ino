@@ -124,20 +124,21 @@ void handleSerialCmd(char* command)
   byte arrV[2];
   CCPACKET packet;
   ATQUERY atQuery = ATQUERY_REQUEST;  
- 
+
   // Data mode?
   if (serMode == SERMODE_DATA)
   {
     packet.length = strlen(command)/2;
-    
+   
     if (packet.length > 0)
     {
       // Convert ASCII string into array of bytes
       for(i=0 ; i<packet.length ; i++)
-      {     
+      {
         packet.data[i] = charToHex(command[i*2]) << 4;
         packet.data[i] |= charToHex(command[i*2 + 1]);
       }
+
       // Send packet via RF
       panstamp.sendData(packet);
     }
@@ -362,7 +363,7 @@ void loop()
       memset(strSerial, 0, sizeof(strSerial));
       len = 0;
     }
-    else
+    else if (ch!= 0x0A)
     {
       strSerial[len] = ch; 
       len++;
