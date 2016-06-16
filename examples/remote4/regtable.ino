@@ -36,7 +36,7 @@ DEFINE_COMMON_REGISTERS()
  * Definition of custom registers
  */
 // Sensor data register
-byte dtSensor[3];    // Voltage supply and binary input state
+byte dtSensor[5];    // Voltage supply and binary input state
 REGISTER regSensor(dtSensor, sizeof(dtSensor), &updtSensor, NULL);
 
 /**
@@ -63,28 +63,15 @@ DEFINE_COMMON_CALLBACKS()
  * 'rId'  Register ID
  */
 const void updtSensor(byte rId)
-{
-  // Read input pin
-  uint8_t state = 0, tmp;
-  
-  for(uint8_t i=0 ; i<NBOF_INPUTS ; i++)
-  {
-    tmp = digitalRead(inputPin[i]);
-    
-    if (!tmp) // invert state
-      state |= (1 << i);
-    else
-      state &= ~(1 << i);
-  }
-
+{ 
   // Update state byte with accelerometer motion flag
   if (motion)
   {
-    state |= 0x0F;
+    state |= 0x80;
     motion = 0;
   }
   else
-    state &= ~0xFF;
+    state &= ~0x80;
     
   // Read Vcc
   uint32_t voltage = panstamp.getVcc();

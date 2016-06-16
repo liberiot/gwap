@@ -42,8 +42,8 @@
 #include "thermistor.h"
 
 // thermistor pins
-#define NTC_POWER_PIN 22
-#define NTC_PIN A5
+#define NTC_POWER_PIN 11
+#define NTC_PIN A2
 // Thermistor object
 THERMISTOR thermistor(NTC_PIN,        // Analog pin
                       10000,          // Nominal resistance at 25 ºC
@@ -51,8 +51,8 @@ THERMISTOR thermistor(NTC_PIN,        // Analog pin
                       10000);         // Value of the series resistor
                       
 // Accelerometer object. Interruptable pin = internal ACC_INT pin
-#define ACC_INT  8 // Accelerometer interrupt pin
-#define ACC_POWER_PIN 16 // Power pin from the host
+#define ACC_INT  0 // Accelerometer interrupt pin
+#define ACC_POWER_PIN 18 // Power pin from the host
 MMA8652 accel = MMA8652(ACC_INT);
 
 // Used to read statuses and source registers
@@ -65,7 +65,7 @@ uint8_t status, intSource;
 #define powerAccelerometerOff()  digitalWrite(ACC_POWER_PIN, LOW)
 
 // Motion flag
-volatile uint8_t motion = 0;
+volatile uint8_t motion = 0, state;
 
 /**
  * Input pin
@@ -74,18 +74,19 @@ const uint8_t inputPin[] = {12, 13, 14, 15};
 #define NBOF_INPUTS  sizeof(inputPin)/sizeof(*inputPin)
  
 /**
- * Pin event flag
- */
-bool pinEvent = false;
-
-/**
  * pinChange
  * 
  * Pin change interrupt
  */
 void pinChange(void)
-{
-  pinEvent = true;
+{  
+  state = 0;
+  
+  for(uint8_t i=0 ; i<NBOF_INPUTS ; i++)
+  {
+    if (digitalRead(inputPin[i]))
+      state |= (1 << i);
+  }
 }
 
 /**
@@ -118,14 +119,17 @@ void setup()
   for(i=0 ; i<NBOF_INPUTS ; i++)
   {
     // Configure input pin
-    pinMode(inputPin[i], INPUT);
+    pinMode(inputPin[i], INPUT_PULLDOWN);
     // Attach custom function to Pin Change Interrupt
-    attachInterrupt(inputPin[i], pinChange, CHANGE);
+    attachInterrupt(inputPin[i], pinChange, RISING);
   }
 
+  // Configure NTC power pin
+  pinMode(NTC_POWER_PIN, OUTPUT);
+  
   // Init GWAP stack
   gwap.init();
-  
+
   // Configure sensor power pin
   pinMode(ACC_POWER_PIN, OUTPUT);
   powerAccelerometerOff();
@@ -146,7 +150,7 @@ void setup()
 
   // Declare custom ISR
   accel.attachInterrupt(accEvent);
-  
+
   // Enter SYNC state
   gwap.enterSystemState(SYSTATE_SYNC);
 
@@ -161,9 +165,6 @@ void setup()
   // Transmit periodic Tx interval
   gwap.getRegister(REGI_TXINTERVAL)->getData();
   delay(GWAP_TX_SILENCE);
-  // Transmit initial binary state
-  gwap.getRegister(REGI_SENSOR)->getData();
-  delay(GWAP_TX_SILENCE);  
   // Switch to Rx OFF state
   gwap.enterSystemState(SYSTATE_RXOFF);
   delay(GWAP_TX_SILENCE);
@@ -182,5 +183,11 @@ void loop()
   accel.sleep();
   // Sleep
   gwap.goToSleep();
+
+  // Motion button press detected?
+  if (motion || state)
+    accel.disableTapInt();  // Disable tap interrupt
+  else
+    accel.enableTapInt(0);  // Enable tap interrupt
 }
 
