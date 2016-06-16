@@ -88,6 +88,9 @@ void setup()
   // Init GWAP stack
   gwap.init();
 
+  // Configure NTC power pin
+  pinMode(NTC_POWER_PIN, OUTPUT);
+  
   // Configure sensor power pin
   pinMode(ACC_POWER_PIN, OUTPUT);
   powerAccelerometerOff();
