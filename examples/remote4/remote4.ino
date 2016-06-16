@@ -177,11 +177,16 @@ void setup()
  */
 void loop()
 {
+  // Transmit sensor data
   gwap.getRegister(REGI_SENSOR)->getData();
+
+  // Reset button and motion flags
+  state = 0;
+  motion = 0;
   
   // Accelerometer in sleep mode
   accel.sleep();
-  // Sleep
+  // Sleep panStamp module
   gwap.goToSleep();
 
   // Motion button press detected?
