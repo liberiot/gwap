@@ -72,12 +72,8 @@ void rfPacketReceived(CCPACKET *packet)
   if (packet->length >= GWAP_DATA_HEAD_LEN)
   {
     GWPACKET gwPacket(packet);
-
-    if (gwPacket.checkCrc())
-    {
-      rxPacket = packet;
-      packetAvailable = true;
-    }
+    rxPacket = packet;
+    packetAvailable = true;
   }
 }
 
