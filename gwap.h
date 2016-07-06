@@ -28,6 +28,10 @@
 #include "register.h"
 #include "gwpacket.h"
 
+#ifdef PANSTAMP_NRG
+#include "cc430aes.h"
+#endif
+
 /**
  * GWAP official synchronisation word
  */
@@ -85,7 +89,12 @@ class GWAP
      * GWAP address
      */
     uint8_t address[GWAP_ADDRESS_LENGTH];
-   
+
+    /**
+     * Security options
+     */
+    uint8_t security;
+
     /**
      * Security nonce
      */
@@ -175,6 +184,24 @@ class GWAP
 
       return NULL;
     }
+
+    /**
+     * setAesPassword
+     * 
+     * Set AES-128 Encryption password
+     * 
+     * @param password Encryption password. It must be 16 byte length
+     */
+    #ifdef PANSTAMP_NRG
+    inline void setAesPassword(unsigned char* password)
+    {
+      // Set AES-128 key
+      CC430AES::setKey(password);
+     
+      // Enable AES Encryption
+      security = 1;
+    }
+    #endif
 };
 
 /**

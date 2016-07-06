@@ -36,11 +36,17 @@
 GWPACKET::GWPACKET(CCPACKET *packet) 
 {
   uint8_t i;
-   
+
   // Save raw data and length
   ccPacket.length = packet->length;
   for(i=0 ; i<ccPacket.length ; i++)
     ccPacket.data[i] = packet->data[i];
+
+  #ifdef PANSTAMP_NRG
+  // AES-128 encrypted?
+  if (gwap.security)
+    aesCrypto();  // Decrypt
+  #endif
   
   crc = ccPacket.data[ccPacket.length-1];
 
@@ -105,6 +111,12 @@ bool GWPACKET::send(void)
     crc += ccPacket.data[i];
   ccPacket.data[i] = crc; // Place CRC byte at the end of the frame
 
+  #ifdef PANSTAMP_NRG
+  // Need to be AES-128 encrypted?
+  if (gwap.security)
+    aesCrypto();  // Encrypt
+  #endif
+
   i = GWAP_NB_TX_TRIES;
   while(!(res = panstamp.sendData(ccPacket)) && i>1)
   {
@@ -133,4 +145,28 @@ bool GWPACKET::checkCrc(void)
 
   return (tmpCrc == crc);
 }
+
+/**
+ * aesCrypto
+ * 
+ * Apply AES-128 encryption with CTR cipher to the GWAP packet passed
+ * as argument
+ */
+#ifdef PANSTAMP_NRG
+void GWPACKET::aesCrypto(void) 
+{
+  uint8_t i;
+  uint32_t initNonce = 0;
+ 
+  // Create initial CTR nonce with first 14 bytes
+  // None of these fields are encrypted
+  for(i=9 ; i<13 ; i++)
+  {
+    initNonce <<= 8;
+    initNonce |= ccPacket.data[i];
+  }
+  
+  CC430AES::ctrCrypto(ccPacket.data + 14, ccPacket.length - 14, initNonce);
+}
+#endif
 

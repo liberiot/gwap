@@ -93,6 +93,7 @@ void packetReceived(CCPACKET *packet)
  */
 GWAP::GWAP(void)
 {
+  security = 0;
   nonce = 0;
   statusReceived = NULL;
 }

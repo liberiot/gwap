@@ -78,7 +78,15 @@ class GWPACKET
      * Raw packet
      */
      CCPACKET ccPacket;
-     
+
+    /**
+     * aesCrypto
+     * 
+     * Apply AES-128 encryption with CTR cipher to the GWAP packet passed
+     * as argument
+     */
+    void aesCrypto(void);
+
   public:
     /**
      * Source address
