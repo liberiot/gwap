@@ -92,7 +92,8 @@ void pinChange(void)
  */
 void outage(void)
 {
-  alarm = 1;
+  alarm = digitalRead(VCC_MONITOR_PIN);
+  gwap.getRegister(REGI_ALARM)->getData();
 }
 
 /**
@@ -130,7 +131,7 @@ void setup()
 
   // Config Vcc monitor pin
   pinMode(VCC_MONITOR_PIN, INPUT);
-  attachInterrupt(VCC_MONITOR_PIN, outage, FALLING);
+  attachInterrupt(VCC_MONITOR_PIN, outage, CHANGE);
 
   // Config status LED's
   pinMode(RED_LED, OUTPUT);
@@ -154,6 +155,8 @@ void setup()
   delay(GWAP_TX_SILENCE);
   gwap.getRegister(REGI_BINOUTPUT1)->getData();
   delay(GWAP_TX_SILENCE);
+  gwap.getRegister(REGI_ALARM)->getData();
+  delay(GWAP_TX_SILENCE);
 }
 
 /**
@@ -163,11 +166,6 @@ void setup()
  */
 void loop()
 {
-  if (alarm)
-  {
-    gwap.getRegister(REGI_ALARM)->getData();
-    alarm = 0;
-  }
   if (pinEvent)
   {
     pinEvent = false;
