@@ -94,6 +94,7 @@ void outage(void)
 {
   alarm = digitalRead(VCC_MONITOR_PIN);
   gwap.getRegister(REGI_ALARM)->getData();
+  digitalWrite(RED_LED, HIGH);
 }
 
 /**
@@ -131,7 +132,7 @@ void setup()
 
   // Config Vcc monitor pin
   pinMode(VCC_MONITOR_PIN, INPUT);
-  attachInterrupt(VCC_MONITOR_PIN, outage, CHANGE);
+  attachInterrupt(VCC_MONITOR_PIN, outage, FALLING);
 
   // Config status LED's
   pinMode(RED_LED, OUTPUT);
