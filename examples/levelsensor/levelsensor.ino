@@ -69,7 +69,29 @@ THERMISTOR thermistor(NTC_PIN,        // Analog pin
                       10000,          // Nominal resistance at 25 ºC
                       3950,           // thermistor's beta coefficient
                       10000);         // Value of the series resistor
-                      
+
+/**
+ * readLevel
+ * 
+ * Read level from ultrasonic transducer
+ * 
+ * @return level detected in cm
+ */
+uint16_t readLevel(void)
+{
+  uint16_t res;
+  
+  // Read level
+  digitalWrite(SENSOR_TRIGGER, HIGH);
+  delayMicroseconds(50);
+  digitalWrite(SENSOR_TRIGGER, LOW);
+  // Compute distance
+  res = pulseIn(SENSOR_ECHO, HIGH);
+  res = res/58;    // Distance in cm
+
+  return res;
+}
+
 /**
  * setup
  *
@@ -142,27 +164,5 @@ void loop()
   gwap.getRegister(REGI_SENSOR)->getData();
 
   gwap.goToSleep();
-}
-
-/**
- * readLevel
- * 
- * Read level from ultrasonic transducer
- * 
- * @return level detected in cm
- */
-uint16_t readLevel(void)
-{
-  uint16_t res;
-  
-  // Read level
-  digitalWrite(SENSOR_TRIGGER, HIGH);
-  delayMicroseconds(50);
-  digitalWrite(SENSOR_TRIGGER, LOW);
-  // Compute distance
-  res = pulseIn(SENSOR_ECHO, HIGH);
-  res = res/58;    // Distance in cm
-
-  return res;
 }
 

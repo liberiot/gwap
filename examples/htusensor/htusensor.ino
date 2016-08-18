@@ -43,8 +43,8 @@
  */
 
 #include "Wire.h"
-#include "regtable.h"
 #include "gwap.h"
+#include "regtable.h"
 #include "SparkFunHTU21D.h"
 
 // Uncomment next line if you are running this application from a

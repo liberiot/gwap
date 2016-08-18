@@ -39,8 +39,8 @@
  */
 
 #include "Wire.h"
-#include "regtable.h"
 #include "gwap.h"
+#include "regtable.h"
 #include "mma8652.h"
 #include "thermistor.h"
 

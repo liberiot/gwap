@@ -27,7 +27,6 @@
 #ifndef _REGTABLE_H
 #define _REGTABLE_H
 
-#include "Arduino.h"
 #include "register.h"
 #include "commonregs.h"
 

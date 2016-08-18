@@ -36,9 +36,9 @@
  * configuration parameters:
  * 00010004.json (Temperature sensor)
  */
- 
-#include "regtable.h"
+
 #include "gwap.h"
+#include "regtable.h"
 #include "thermistor.h"
 
 

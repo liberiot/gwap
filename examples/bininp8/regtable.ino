@@ -28,6 +28,11 @@
 #include "regtable.h"
 
 /**
+ * Declaration of custom functions
+ */
+const void updtBinInput(byte rId);
+
+/**
  * Definition of common registers
  */
 DEFINE_COMMON_REGISTERS()

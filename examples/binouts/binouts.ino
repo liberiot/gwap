@@ -40,9 +40,9 @@
  * configuration parameters:
  * 00010007.json (Binary/PWM output module)
  */
- 
-#include "regtable.h"
+
 #include "gwap.h"
+#include "regtable.h"
 
 // Binary output pins (Arduino digital pins)
 uint8_t binaryPin[] = {15, 14, 13, 12, 11, 10, 9, 8};

@@ -116,7 +116,7 @@ void isrT1event(void)
  */
 void handleSerialCmd(char* command)
 {
-  byte i, len;
+  byte i=0, len;
   byte arrV[2];
   CCPACKET packet;
   ATQUERY atQuery = ATQUERY_REQUEST;  

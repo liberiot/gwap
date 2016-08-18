@@ -42,8 +42,8 @@
  * 0001000C.json (Binary/PWM output module)
  */
  
-#include "regtable.h"
 #include "gwap.h"
+#include "regtable.h"
 
 
 // Binary output pins (Arduino digital pins)

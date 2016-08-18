@@ -36,9 +36,9 @@
  * configuration parameters:
  * 00010012.json (current meter)
  */
- 
-#include "regtable.h"
+
 #include "gwap.h"
+#include "regtable.h"
 #include "thermistor.h"
 #include "channel.h"
 

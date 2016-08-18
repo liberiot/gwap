@@ -27,6 +27,16 @@
 #include "product.h"
 #include "regtable.h"
 
+
+/**
+ * Declaration of custom functions
+ */
+const void updtSensor(byte rId);
+
+/**
+ * Declaration of custom functions
+ */
+ 
 /**
  * Definition of common registers
  */
