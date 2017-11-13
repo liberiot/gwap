@@ -316,10 +316,11 @@ void loop()
 
     if (serMode == SERMODE_DATA)
     {
+      uint8_t rssi = (uint8_t)(rxPacket->rssi & 0xFF);
       Serial.print("(");
-      if (rxPacket->rssi < 0x10)
+      if (rssi < 0x10)
         Serial.print("0");
-      Serial.print(rxPacket->rssi, HEX);
+      Serial.print(rssi, HEX);
       if (rxPacket->lqi < 0x10)
         Serial.print("0");
       Serial.print(rxPacket->lqi, HEX);
