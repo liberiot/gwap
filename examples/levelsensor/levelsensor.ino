@@ -112,8 +112,6 @@ void setup()
   digitalWrite(SENSOR_TRIGGER, LOW);
   pinMode(SENSOR_ECHO, INPUT);
 
-  // Enter high Tx power mode
-  panstamp.setHighTxPower();
   // Long distance board?
   //panstamp.radio.enableHGM();
   

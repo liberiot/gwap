@@ -116,8 +116,6 @@ void setup()
 
   // Disable address check from the RF IC
   panstamp.radio.disableAddressCheck();
-  // Enter high Tx power mode
-  panstamp.setHighTxPower();
   
   // Configure output pins
   for(i=0 ; i<sizeof(binaryPin) ; i++)

@@ -50,10 +50,7 @@ RGBLED rgbLed = RGBLED(19, 3, 4);
 void setup() 	 
 {
   digitalWrite(LED, LOW);
-
-  // Enter high Tx power mode
-  panstamp.setHighTxPower();
-  
+ 
   // Init SWAP stack
   gwap.init();
 

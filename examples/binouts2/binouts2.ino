@@ -61,10 +61,7 @@ void setup()
   uint8_t i;
   
   digitalWrite(LED, LOW);
-
-  // Enter high Tx power mode
-  panstamp.setHighTxPower();
-  
+ 
   // Configure output pins
   for(i=0 ; i<sizeof(binaryPin) ; i++)
   {

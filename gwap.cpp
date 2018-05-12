@@ -133,6 +133,9 @@ void GWAP::init(void)
 
   // Attach RF ISR
   panstamp.attachInterrupt(packetReceived);
+
+  // Enter high Tx power mode by default
+  panstamp.setHighTxPower();
 }
 
 /**

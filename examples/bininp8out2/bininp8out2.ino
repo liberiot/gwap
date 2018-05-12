@@ -109,8 +109,6 @@ void setup()
   pinMode(LED, OUTPUT);
   digitalWrite(LED, LOW);
 
-  // Enter high Tx power mode
-  panstamp.setHighTxPower();
   // Long distance board?
   //panstamp.radio.enableHGM();
 

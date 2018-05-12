@@ -49,18 +49,13 @@
 
 // Uncomment next line if you are running this application from a
 // battery-board
-#define READ_VCC_FROM_A0  1
+//#define READ_VCC_FROM_A0  1
 
 //Create an instance of the sensor object
 HTU21D htu;
 
 void setup()
 {
-  int i;
-
-  // Enter high Tx power mode
-  panstamp.setHighTxPower();
-
   // Init GWAP stack
   gwap.init();
 
@@ -78,7 +73,7 @@ void setup()
   gwap.enterSystemState(SYSTATE_SYNC);
 
   // During 3 seconds, listen the network for possible commands whilst the LED blinks
-  for(i=0 ; i<6 ; i++)
+  for(uint8_t i=0 ; i<6 ; i++)
   {
     digitalWrite(LED, HIGH);
     delay(100);

@@ -106,13 +106,9 @@ void accEvent(void)
  */
 void setup()
 {
-  uint8_t i;
-
   pinMode(LED, OUTPUT);
   digitalWrite(LED, LOW);
 
-  // Enter high Tx power mode
-  panstamp.setHighTxPower();
   // Long distance board?
   //panstamp.radio.enableHGM();
   
@@ -155,7 +151,7 @@ void setup()
   gwap.enterSystemState(SYSTATE_SYNC);
 
   // During 3 seconds, listen the network for possible commands whilst the LED blinks
-  for(i=0 ; i<6 ; i++)
+  for(uint8_t i=0 ; i<6 ; i++)
   {
     digitalWrite(LED, HIGH);
     delay(100);

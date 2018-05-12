@@ -67,13 +67,8 @@ Adafruit_TSL2561_Unified tsl = Adafruit_TSL2561_Unified(TSL2561_ADDR_FLOAT, 1234
 
 void setup()
 {
-  int i;
-
   pinMode(TSL_PWR_PIN, OUTPUT);
   digitalWrite(TSL_PWR_PIN, LOW);
-
-  // Enter high Tx power mode
-  panstamp.setHighTxPower();
 
   // Init GWAP stack
   gwap.init();
@@ -87,6 +82,7 @@ void setup()
  
   // Initialize sensor
   htu.begin();
+  
 
   // Initialize light sensor
   tsl.begin();
@@ -97,7 +93,7 @@ void setup()
   gwap.enterSystemState(SYSTATE_SYNC);
 
   // During 3 seconds, listen the network for possible commands whilst the LED blinks
-  for(i=0 ; i<6 ; i++)
+  for(uint8_t i=0 ; i<6 ; i++)
   {
     digitalWrite(LED, HIGH);
     delay(100);
