@@ -60,7 +60,7 @@ byte t1Ticks = 0;     // Timer 1 ticks
 /**
  * LED pin
  */
-#define LEDPIN  4
+#define LEDPIN  ONBOARD_LED
 
 byte charToHex(byte ch);
 
