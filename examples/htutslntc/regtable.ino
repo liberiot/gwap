@@ -128,6 +128,7 @@ const void updtSensor(byte rId)
   uint16_t extTemp = thermistor.read();   // Read temperature from NTC
   powerThermistorOff();                   // Unpower thermistor
 
+  extTemp += 500;
   dtSensor[8] = (extTemp >> 8) & 0xFF;
   dtSensor[9] = extTemp & 0xFF;
 
