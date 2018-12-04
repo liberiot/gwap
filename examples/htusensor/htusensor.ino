@@ -91,10 +91,10 @@ void setup()
 
 void loop()
 {
-//  digitalWrite(LED, HIGH);
+  digitalWrite(LED, HIGH);
   // Transmit sensor data
   gwap.getRegister(REGI_SENSOR)->getData();
-//  digitalWrite(LED, LOW);
+  digitalWrite(LED, LOW);
 
   // Sleep
   gwap.goToSleep();
