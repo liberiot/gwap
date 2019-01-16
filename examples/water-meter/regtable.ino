@@ -81,4 +81,3 @@ const void updtSensor(byte rId)
   dtSensor[6] = (waterPressure >> 8) & 0xFF;
   dtSensor[7] = waterPressure & 0xFF;
 }
-

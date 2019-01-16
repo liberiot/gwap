@@ -40,7 +40,7 @@
 #include "gwap.h"
 #include "regtable.h"
 
-//#define SERIAL_DEBUG  1
+#define SERIAL_DEBUG  1
 #ifdef SERIAL_DEBUG
 #include <HardwareSerial.h>
 #endif
@@ -58,12 +58,8 @@ uint32_t totalMilliLitres = 0;
 const uint8_t WATER_PRESS_PIN = A2;
 uint16_t waterPressure = 0;
 
-// Sampling interval in seconds
-const uint8_t samplingInterval = 15;
-
-// Enable wireless transmission
-bool transmit = false;
-
+// Sampling interval in msec
+uint16_t samplingInterval = 1000;
 /**
  * pulseCounter
  * 
@@ -77,29 +73,16 @@ void pulseCounter(void)
 /**
  * readFlow
  * 
- * Read water flow and pressure sensors
+ * Read water flow meter
  */
 void readFlow(void)
-{ 
-  // Power water pressure sensor
-  digitalWrite(EXT_PSU_EN_PIN, HIGH);
-  delay(100);
-
-  // Read water pressure pin
-  analogReference(INTERNAL2V5);
-  uint16_t adc = analogRead(WATER_PRESS_PIN);
-  float voltage = (adc * 2.5 / 0xFFF) * 2;
-  // P = 0.3 * V - 0.15 MPa/cm2
-  waterPressure = voltage * 300 - 150; // In KPa/cm2
-  
-  // Unpower water pressure sensor  
-  digitalWrite(EXT_PSU_EN_PIN, LOW);
-  
+{   
   // Calculate flow rate l/min
   float flowRate = pulseCount / calibrationFactor;
-  // Calculate millilitres consummed in txInterval
-  totalMilliLitres = flowRate * gwap.txInterval;
-  totalMilliLitres /= 60;
+  // Calculate millilitres consummed in samplingInterval msec
+  uint32_t partial = flowRate * samplingInterval;
+  partial /= 60;
+  totalMilliLitres += partial;
 
   #ifdef SERIAL_DEBUG
   Serial.print("Pulses: ");
@@ -108,7 +91,27 @@ void readFlow(void)
   Serial.print(flowRate);
   Serial.print(" millilitres: ");
   Serial.println(totalMilliLitres);
-  
+  #endif
+
+  pulseCount = 0;
+}
+
+
+/**
+ * readPressure
+ * 
+ * Read water pressure sensor
+ */
+void readPressure(void)
+{ 
+  // Read water pressure pin
+  analogReference(INTERNAL2V5);
+  uint16_t adc = analogRead(WATER_PRESS_PIN);
+  float voltage = (adc * 2.5 / 0xFFF) * 2;
+  // P = 0.3 * V - 0.15 MPa/cm2
+  waterPressure = voltage * 300 - 150; // In KPa/cm2
+
+  #ifdef SERIAL_DEBUG
   Serial.print("ADC: ");
   Serial.print(adc);
   Serial.print(" Voltage: ");
@@ -116,8 +119,6 @@ void readFlow(void)
   Serial.print(" Pressure: ");
   Serial.println(waterPressure);
   #endif
-
-  pulseCount = 0;
 }
 
 /**
@@ -138,6 +139,8 @@ void setup()
   // Initialize external PSU (MCP1640B) enable pin
   pinMode(EXT_PSU_EN_PIN, OUTPUT);
   digitalWrite(EXT_PSU_EN_PIN, LOW);
+digitalWrite(EXT_PSU_EN_PIN, HIGH);
+gwap.txInterval = 60;
   
   #ifdef SERIAL_DEBUG
   Serial.begin(38400);
@@ -147,25 +150,13 @@ void setup()
   // Flow meter
   pinMode(FLOWMETER_PIN, INPUT_PULLUP);
   
-  // Enter SYNC state
-  gwap.enterSystemState(SYSTATE_SYNC);
-
-  // During 3 seconds, listen the network for possible commands whilst the LED blinks
-  for(i=0 ; i<6 ; i++)
-  {
-    digitalWrite(LED, HIGH);
-    delay(100);
-    digitalWrite(LED, LOW);
-    delay(400);
-  }
+  // Enter Rx ON state
+  gwap.enterSystemState(SYSTATE_RXON);
 
   // Transmit periodic Tx interval
   gwap.getRegister(REGI_TXINTERVAL)->getData();
   delay(GWAP_TX_SILENCE);
-   // Switch to Rx OFF state
-  gwap.enterSystemState(SYSTATE_RXOFF);
-  delay(GWAP_TX_SILENCE);
-
+  
   // Keep counting pulses from flow sensor
   attachInterrupt(FLOWMETER_PIN, pulseCounter, RISING);
 }
@@ -176,11 +167,20 @@ void setup()
  * Arduino main loop
  */
 void loop()
-{
-  // Sleep
-  panstamp.sleepSec(samplingInterval);
+{ 
+  // Read flow meter
+  for(uint8_t i=0 ; i<60 ; i++)
+  {
+    readFlow();
+    delay(samplingInterval);
+  }
 
-  // Calculate and transmit values
+  // Read water pressure sensor
+  readPressure();
+
+  // Transmit values
   gwap.getRegister(REGI_SENSOR)->getData();
-}
 
+  // Reset water consumption value
+  totalMilliLitres = 0;
+}
